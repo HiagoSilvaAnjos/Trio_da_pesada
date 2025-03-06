@@ -37,7 +37,8 @@ def start():
         # Nível 1
         texto = abrir_arquivo(caminho_relativo_entrada)
         texto_processado = processar_texto(texto) # Vai retornar uma tupla com dois valores => (sentenças_tokenizadas, sentenças_originais)
-        print(texto_processado)
+        print(texto_processado[0])
+        print(texto_processado[1])
 
         # Nível 2
 
