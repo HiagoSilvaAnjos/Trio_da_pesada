@@ -12,6 +12,21 @@ caminho_relativo_saida = "/workspaces/Trio_da_pesada/texto_saida.txt"
 def remover_stopwords_pontuacao(sentenca_tokenizada):  
        return [token.text for token in nlp(sentenca_tokenizada) if not token.is_punct and not token.is_stop]
 
+def juntar(x,texto_processado):
+    if x >= (len(texto_processado[0]))-1:
+        return None
+    else:
+        juncao = []
+
+        limite = x+2 
+
+        while x < limite: 
+            for palavra in texto_processado[0][x]:
+                if palavra not in juncao:
+                    juncao.append(palavra)
+            x+=1
+        return juncao
+
 #MAIN FUNCTIONS
 def abrir_arquivo(caminho_relativo):
     try:
@@ -83,6 +98,84 @@ def start():
         print(texto_processado[1])
 
         # Nível 2
+
+        
+        final = [[] for _ in range((len(texto_processado[0]))-1)]
+
+        for setencas in range((len(texto_processado[0]))-1): # pega o indice das setencas
+
+            #funcao juntar estar na HELPER FUNCTIONS
+            lista = juntar(setencas,texto_processado) # lista junta a n° setenca com a (n+1)º setença
+
+            for palavra in lista:
+                contagem = 0 #renicia a cada palavra
+
+                #COMPARA A LISTA COM AS DUAS SETENCAS AO MESMO TEMPO E ADICIONA AO MEMSO TEMPO
+
+                for palavra_setencas in texto_processado[0][setencas]: #pega todas as palavras da nº setença
+                    if palavra_setencas == palavra: #se a palavra da nº setenca for igual a palavra da lista de juncao...
+                        contagem += 1 #conte mais um
+
+                for palavra_setencas in texto_processado[0][setencas + 1]: #pega todas as palavras da (n+1)º setença
+                    if palavra_setencas == palavra: #se a palavra da (n+1)º setença for igual a palavra da lista de juncao...
+                        contagem += 1  #conte mais um
+
+                final[setencas].append(contagem)  #na lista final no indice nº adicione a contagem (feita nas duas setencas)
+
+        print(final)
+
+        # COLOCAR AS LISTAS DO MESMO TAMANHO 
+
+        maior = 0
+        for i in range(len(final)):
+            if len(final[i]) >= maior:
+                maior = len(final[i])
+        
+        for i in range(len(final)):
+
+            if len(final[i]) < maior:
+                
+                for j in range(maior-(len(final[i]))):
+                    final[i].append(0)
+
+            if len(final[i]) == maior:
+                None
+
+        print(final)
+        print(maior)
+
+        similaridade = []
+
+        for i in range(len(final)-1):
+            A = final[i]
+            B = final[i+1]
+
+            numerador = 0
+            denominadorA = 0
+            denominadorB = 0
+
+            for x in range(maior):
+                numerador += A[x]*B[x]
+                denominadorA += A[x]**2
+                denominadorB += B[x]**2
+
+            raizA = math.sqrt(denominadorA)
+            raizB = math.sqrt(denominadorB)
+
+            if raizA == 0 or raizB == 0:
+                similaridadeAB = 0
+            else:
+                denominador=raizA * raizB
+                similaridadeAB = numerador / denominador
+
+
+            print(numerador,"dividio", denominador)
+            print("similaridade:", similaridadeAB)
+            print()
+
+            similaridade.append(similaridadeAB)
+
+            print(similaridade)
 
         #Nível 3
         sentencas_completas = []
