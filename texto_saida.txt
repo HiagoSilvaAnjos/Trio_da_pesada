@@ -1,0 +1,15 @@
+Python é uma linguagem de programação popular para ciência de dados. 
+<Tópicos: Python, linguagem> 
+
+Muitas pessoas utilizam Python para análise de dados e machine learning. Ciência de dados e machine learning são áreas que se beneficiam das bibliotecas do Python. 
+<Tópicos: Python, dados, machine, learning> 
+
+Com suas bibliotecas poderosas, Python tornou-se essencial para inteligência artificial. 
+<Tópicos: bibliotecas, poderosas> 
+
+JavaScript é essencial para desenvolvimento web moderno. No desenvolvimento web, JavaScript permite criar interfaces dinâmicas. Frameworks baseados em JavaScript, como React e Next.js, facilitam o desenvolvimento web. 
+<Tópicos: JavaScript, desenvolvimento, web> 
+
+JavaScript e React são amplamente usados para aplicações interativas. 
+<Tópicos: JavaScript, React> 
+

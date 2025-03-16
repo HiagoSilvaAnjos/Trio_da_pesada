@@ -4,6 +4,8 @@
 
 import spacy
 nlp = spacy.load("pt_core_news_lg")
+import math
+from collections import Counter
 
 caminho_relativo_entrada = "/workspaces/Trio_da_pesada/texto_entrada.txt"
 caminho_relativo_saida = "/workspaces/Trio_da_pesada/texto_saida.txt"
@@ -27,6 +29,13 @@ def juntar(x,texto_processado):
             x+=1
         return juncao
 
+def lista_maior(lista):
+    maior = 0
+    for i in range(len(lista)):
+        if len(lista[i]) >= maior:
+            maior = len(lista[i])
+    return maior
+
 #MAIN FUNCTIONS
 def abrir_arquivo(caminho_relativo):
     try:
@@ -46,6 +55,66 @@ def processar_texto(texto):
         sentencas_limpas.append(sentenca_limpa)
 
     return (sentencas_limpas,sentencas_tokenizadas)
+
+def contagem(texto):
+    
+        final = [[] for _ in range((len(texto[0]))-1)]
+
+        for setencas in range((len(texto[0]))-1): # pega o indice das setencas
+
+            #funcao juntar estar na HELPER FUNCTIONS
+            lista = juntar(setencas,texto) # lista junta a n° setenca com a (n+1)º setença
+
+            for palavra in lista:
+                contagem = 0 #renicia a cada palavra
+
+                #COMPARA A LISTA COM AS DUAS SETENCAS AO MESMO TEMPO E ADICIONA AO MEMSO TEMPO
+
+                for palavra_setencas in texto[0][setencas]: #pega todas as palavras da nº setença
+                    if palavra_setencas == palavra: #se a palavra da nº setenca for igual a palavra da lista de juncao...
+                        contagem += 1 #conte mais um
+
+                for palavra_setencas in texto[0][setencas + 1]: #pega todas as palavras da (n+1)º setença
+                    if palavra_setencas == palavra: #se a palavra da (n+1)º setença for igual a palavra da lista de juncao...
+                        contagem += 1  #conte mais um
+
+                final[setencas].append(contagem)  #na lista final no indice nº adicione a contagem (feita nas duas setencas)
+
+        return final
+
+def similaridade(lista_contagem,maior):
+
+    similaridade_lista = []
+
+    for i in range(len(lista_contagem)-1):
+        A = lista_contagem[i]
+        B = lista_contagem[i+1]
+
+        numerador = 0
+        denominadorA = 0
+        denominadorB = 0
+
+        for x in range(maior):
+            numerador += A[x]*B[x]
+            denominadorA += A[x]**2
+            denominadorB += B[x]**2
+
+        raizA = math.sqrt(denominadorA)
+        raizB = math.sqrt(denominadorB)
+
+        if raizA == 0 or raizB == 0:
+            similaridadeAB = 0
+        else:
+            denominador=raizA * raizB
+            similaridadeAB = numerador / denominador
+
+        print(numerador,"dividio", denominador)
+        print("similaridade:", similaridadeAB)
+        print()
+
+        similaridade_lista.append(similaridadeAB)
+
+    return similaridade_lista
 
 def pegar_topicos(texto):
     tokens_do_texto = remover_stopwords_pontuacao(texto)
@@ -99,83 +168,30 @@ def start():
 
         # Nível 2
 
-        
-        final = [[] for _ in range((len(texto_processado[0]))-1)]
+        # fica em MAIN FUCTIONS
+        lista_contagem = contagem(texto_processado)
+        print(lista_contagem)
 
-        for setencas in range((len(texto_processado[0]))-1): # pega o indice das setencas
+        # fica em HELPER FUCTIONS
+        maior = lista_maior(lista_contagem) #descobre a lista com maior quantidade de itens
 
-            #funcao juntar estar na HELPER FUNCTIONS
-            lista = juntar(setencas,texto_processado) # lista junta a n° setenca com a (n+1)º setença
+        # COLOCAR AS LISTAS DO MESMO TAMANHO, com base na maior
+        for i in range(len(lista_contagem)):
 
-            for palavra in lista:
-                contagem = 0 #renicia a cada palavra
+            if len(lista_contagem[i]) < maior:
+                    
+                for j in range(maior-(len(lista_contagem[i]))):
+                    lista_contagem[i].append(0)
 
-                #COMPARA A LISTA COM AS DUAS SETENCAS AO MESMO TEMPO E ADICIONA AO MEMSO TEMPO
-
-                for palavra_setencas in texto_processado[0][setencas]: #pega todas as palavras da nº setença
-                    if palavra_setencas == palavra: #se a palavra da nº setenca for igual a palavra da lista de juncao...
-                        contagem += 1 #conte mais um
-
-                for palavra_setencas in texto_processado[0][setencas + 1]: #pega todas as palavras da (n+1)º setença
-                    if palavra_setencas == palavra: #se a palavra da (n+1)º setença for igual a palavra da lista de juncao...
-                        contagem += 1  #conte mais um
-
-                final[setencas].append(contagem)  #na lista final no indice nº adicione a contagem (feita nas duas setencas)
-
-        print(final)
-
-        # COLOCAR AS LISTAS DO MESMO TAMANHO 
-
-        maior = 0
-        for i in range(len(final)):
-            if len(final[i]) >= maior:
-                maior = len(final[i])
-        
-        for i in range(len(final)):
-
-            if len(final[i]) < maior:
-                
-                for j in range(maior-(len(final[i]))):
-                    final[i].append(0)
-
-            if len(final[i]) == maior:
+            if len(lista_contagem[i]) == maior:
                 None
 
-        print(final)
-        print(maior)
+        print(lista_contagem)
+        print()
 
-        similaridade = []
-
-        for i in range(len(final)-1):
-            A = final[i]
-            B = final[i+1]
-
-            numerador = 0
-            denominadorA = 0
-            denominadorB = 0
-
-            for x in range(maior):
-                numerador += A[x]*B[x]
-                denominadorA += A[x]**2
-                denominadorB += B[x]**2
-
-            raizA = math.sqrt(denominadorA)
-            raizB = math.sqrt(denominadorB)
-
-            if raizA == 0 or raizB == 0:
-                similaridadeAB = 0
-            else:
-                denominador=raizA * raizB
-                similaridadeAB = numerador / denominador
-
-
-            print(numerador,"dividio", denominador)
-            print("similaridade:", similaridadeAB)
-            print()
-
-            similaridade.append(similaridadeAB)
-
-            print(similaridade)
+        # fica em HELPER FUCTIONS
+        setencas_similaridades = similaridade(lista_contagem,maior)
+        print(setencas_similaridades)
 
         #Nível 3
         sentencas_completas = []
