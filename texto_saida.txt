@@ -1,3 +1,6 @@
+Tecnologias e Linguagems de programação. 
+<Tópicos: Tecnologias, Linguagems> 
+
 Python é uma linguagem de programação popular para ciência de dados. 
 <Tópicos: Python, linguagem> 
 
@@ -12,4 +15,25 @@ JavaScript é essencial para desenvolvimento web moderno. No desenvolvimento web
 
 JavaScript e React são amplamente usados para aplicações interativas. 
 <Tópicos: JavaScript, React> 
+
+Next.js é um framework baseado em React para desenvolvimento web. Com framework Next.js, desenvolvedores criam aplicações escaláveis e rápidas para o desenvolvimento web. Aplicações escaláveis e rápidas são vantagens do Next.js no ecossistema web. 
+<Tópicos: Next.js, framework, desenvolvimento, web, escaláveis, rápidas> 
+
+TypeScript adiciona tipagem estática ao JavaScript, muitas empresas adotam TypeScript para código mais seguro e escalável. Com TypeScript, muitos desenvolvedores escrevem código JavaScript com mais segurança. 
+<Tópicos: TypeScript, JavaScript, código> 
+
+Django é um framework Python para desenvolvimento web. No desenvolvimento web, Django oferece um conjunto completo de ferramentas. 
+<Tópicos: Django, desenvolvimento, web> 
+
+Frameworks como Django permitem criar aplicações escaláveis e seguras. 
+<Tópicos: Frameworks, Django> 
+
+Go é uma linguagem de programação eficiente para sistemas distribuídos. 
+<Tópicos: Go, linguagem> 
+
+Sistemas distribuídos se beneficiam do desempenho e simplicidade do Go. 
+<Tópicos: Sistemas, distribuídos> 
+
+Empresas utilizam Go para construir aplicações altamente escaláveis. 
+<Tópicos: Empresas, utilizam> 
 

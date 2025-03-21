@@ -152,10 +152,8 @@ def start():
     try:
         # Nível 1
         texto = abrir_arquivo(caminho_relativo_entrada)
-        texto_processado = processar_texto(texto) # Vai retornar uma tupla com dois valores => (sentenças_tokenizadas, sentenças_originais)
-        print(texto_processado[0])
-        print(texto_processado[1])
-
+        texto_processado = processar_texto(texto)
+        
         # Nível 2
         sentencas_concatenadas = concatenar(texto_processado[0], texto_processado[1])
         print("saída das sentencas concatenadas")
@@ -163,8 +161,6 @@ def start():
 
         #Nível 3
         sentencas_completas = []
-        # Essas sentenças concatenadas vão se tornar o texto dado pelo nível dois, só está esse exemplo pra fazer o código funcionar, depois eu altero.
-        #sentencas_concatenadas = ['Python é uma linguagem de programação popular para ciência de dados.', 'Muitas pessoas utilizam Python para análise de dados e machine learning. Ciência de dados e machine learning são áreas que se beneficiam das bibliotecas do Python.', 'Com suas bibliotecas poderosas, Python tornou-se essencial para inteligência artificial.', 'JavaScript é essencial para desenvolvimento web moderno. No desenvolvimento web, JavaScript permite criar interfaces dinâmicas. Frameworks baseados em JavaScript, como React e Next.js, facilitam o desenvolvimento web.', 'JavaScript e React são amplamente usados para aplicações interativas.']
         for senteca in sentencas_concatenadas:
             texto_topico = pegar_topicos(senteca)
             sentencas_completas.append(texto_topico)
