@@ -18,16 +18,16 @@ def juntar(x,texto_processado):
     if x >= (len(texto_processado[0]))-1:
         return None
     else:
-        juncao = []
+        juncao = set()
 
         limite = x+2 
 
         while x < limite: 
             for palavra in texto_processado[0][x]:
                 if palavra not in juncao:
-                    juncao.append(palavra)
+                    juncao.add(palavra)
             x+=1
-        return juncao
+        return list(juncao)
 
 def lista_maior(lista):
     maior = 0
@@ -58,7 +58,7 @@ def processar_texto(texto):
 
 def contagem(texto):
     
-        final = [[] for _ in range((len(texto[0]))-1)]
+        final = [[] for _ in range(len(texto[0]))]
 
         for setencas in range((len(texto[0]))-1): # pega o indice das setencas
 
@@ -68,7 +68,7 @@ def contagem(texto):
             for palavra in lista:
                 contagem = 0 #renicia a cada palavra
 
-                #COMPARA A LISTA COM AS DUAS SETENCAS AO MESMO TEMPO E ADICIONA AO MEMSO TEMPO
+                #COMPARA A LISTA COM AS DUAS SETENCAS AO MESMO TEMPO E ADICIONA AO MESMO TEMPO
 
                 for palavra_setencas in texto[0][setencas]: #pega todas as palavras da nº setença
                     if palavra_setencas == palavra: #se a palavra da nº setenca for igual a palavra da lista de juncao...
@@ -85,8 +85,10 @@ def contagem(texto):
 def similaridade(lista_contagem,maior):
 
     similaridade_lista = []
+    print(len(lista_contagem))
 
     for i in range(len(lista_contagem)-1):
+        
         A = lista_contagem[i]
         B = lista_contagem[i+1]
 
@@ -96,19 +98,20 @@ def similaridade(lista_contagem,maior):
 
         for x in range(maior):
             numerador += A[x]*B[x]
-            denominadorA += A[x]**2
-            denominadorB += B[x]**2
+            #denominadorA += math.sqrt(A[x] ** 2)
+            #denominadorB += math.sqrt(B[x] ** 2)
+            denominadorA += A[x] ** 2
+            denominadorB += B[x] ** 2
 
-        raizA = math.sqrt(denominadorA)
-        raizB = math.sqrt(denominadorB)
+        denominadorA = math.sqrt(denominadorA)
+        denominadorB = math.sqrt(denominadorB)
 
-        if raizA == 0 or raizB == 0:
+        if denominadorA == 0 or denominadorB == 0:
             similaridadeAB = 0
         else:
-            denominador=raizA * raizB
-            similaridadeAB = numerador / denominador
-
-        print(numerador,"dividio", denominador)
+            similaridadeAB = numerador / (denominadorA * denominadorB)
+        
+        print(i,"mais",i+1)
         print("similaridade:", similaridadeAB)
         print()
 
@@ -149,14 +152,31 @@ def pegar_topicos(texto):
             topicos_restantes = f"<Tópicos: {', '.join(topico)}>"
 
             return (texto, topicos_restantes)
-        
+
+def concatenar(setencas_similaridades, texto_processado):
+    limite_similaridade = 0.90
+
+    sentenca_atual = texto_processado[1][0]
+    resultado = []
+
+    for i in range(len(setencas_similaridades)):
+        similaridade = setencas_similaridades[i]
+
+        if similaridade >= limite_similaridade:
+            sentenca_atual += " " + texto_processado[1][i + 1] #concatena
+        else:
+            resultado.append(sentenca_atual) # quebra
+            sentenca_atual = texto_processado[1][i + 1] # renicia a atual
+            
+    resultado.append(sentenca_atual) # adiciona a última
+    return resultado
+
 def criar_aquivos(lista_sentencas):
     with open(caminho_relativo_saida, "w", encoding="utf-8") as paragrafos:
         for paragrafo in lista_sentencas:
             paragrafos.write(f"{paragrafo[0]} \n")
             paragrafos.write(f"{paragrafo[1]} \n")
             paragrafos.write(f"\n")
-
 
 def start(): 
     try:
@@ -193,15 +213,18 @@ def start():
         setencas_similaridades = similaridade(lista_contagem,maior)
         print(setencas_similaridades)
 
+        # fica em MAIN FUCTIONS
+        sentencas_concatenadas = concatenar(setencas_similaridades, texto_processado)
+
         #Nível 3
         sentencas_completas = []
         # Essas sentenças concatenadas vão se tornar o texto dado pelo nível dois, só está esse exemplo pra fazer o código funcionar, depois eu altero.
-        sentencas_concatenadas = ['Python é uma linguagem de programação popular para ciência de dados.', 'Muitas pessoas utilizam Python para análise de dados e machine learning. Ciência de dados e machine learning são áreas que se beneficiam das bibliotecas do Python.', 'Com suas bibliotecas poderosas, Python tornou-se essencial para inteligência artificial.', 'JavaScript é essencial para desenvolvimento web moderno. No desenvolvimento web, JavaScript permite criar interfaces dinâmicas. Frameworks baseados em JavaScript, como React e Next.js, facilitam o desenvolvimento web.', 'JavaScript e React são amplamente usados para aplicações interativas.']
+        #sentencas_concatenadas = ['Python é uma linguagem de programação popular para ciência de dados.', 'Muitas pessoas utilizam Python para análise de dados e machine learning. Ciência de dados e machine learning são áreas que se beneficiam das bibliotecas do Python.', 'Com suas bibliotecas poderosas, Python tornou-se essencial para inteligência artificial.', 'JavaScript é essencial para desenvolvimento web moderno. No desenvolvimento web, JavaScript permite criar interfaces dinâmicas. Frameworks baseados em JavaScript, como React e Next.js, facilitam o desenvolvimento web.', 'JavaScript e React são amplamente usados para aplicações interativas.']
         for senteca in sentencas_concatenadas:
             texto_topico = pegar_topicos(senteca)
             sentencas_completas.append(texto_topico)
 
-        criar_aquivos(sentencas_completas)
+        
         print("Arquivo de texto processado com sucesso!")
     except Exception as e:
         print(f"Erro ao processar o texto: {e}")
