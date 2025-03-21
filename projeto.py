@@ -172,11 +172,14 @@ def concatenar(setencas_similaridades, texto_processado):
     return resultado
 
 def criar_aquivos(lista_sentencas):
-    with open(caminho_relativo_saida, "w", encoding="utf-8") as paragrafos:
-        for paragrafo in lista_sentencas:
-            paragrafos.write(f"{paragrafo[0]} \n")
-            paragrafos.write(f"{paragrafo[1]} \n")
-            paragrafos.write(f"\n")
+    try:
+        with open(caminho_relativo_saida, "w", encoding="utf-8") as paragrafos:
+            for paragrafo in lista_sentencas:
+                paragrafos.write(f"{paragrafo[0]} \n")
+                paragrafos.write(f"{paragrafo[1]} \n")
+                paragrafos.write(f"\n")
+    except FileNotFoundError:
+        return print("Arquivo não encontrado.")
 
 def start(): 
     try:
@@ -215,6 +218,8 @@ def start():
 
         # fica em MAIN FUCTIONS
         sentencas_concatenadas = concatenar(setencas_similaridades, texto_processado)
+        print()
+        # print(sentencas_concatenadas)
 
         #Nível 3
         sentencas_completas = []
@@ -223,8 +228,9 @@ def start():
         for senteca in sentencas_concatenadas:
             texto_topico = pegar_topicos(senteca)
             sentencas_completas.append(texto_topico)
-
         
+        criar_aquivos(sentencas_completas)
+
         print("Arquivo de texto processado com sucesso!")
     except Exception as e:
         print(f"Erro ao processar o texto: {e}")
