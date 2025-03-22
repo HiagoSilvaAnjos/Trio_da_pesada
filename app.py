@@ -7,8 +7,8 @@ nlp = spacy.load("pt_core_news_lg")
 import math
 from collections import Counter
 
-caminho_relativo_entrada = "/workspaces/Trio_da_pesada/texto_entrada.txt"
-caminho_relativo_saida = "/workspaces/Trio_da_pesada/texto_saida.txt"
+caminho_relativo_entrada = "/insira o caminho relativo ao texto de entrada"
+caminho_relativo_saida = "/insira o caminho relativo ao texto de saída"
 
 #HELPER FUNCTIONS
 def remover_stopwords_pontuacao(sentenca_tokenizada):  
@@ -67,9 +67,6 @@ def similaridade_cosseno(Vetor01, Vetor02):
             similaridadeAB = 0
     else:
             similaridadeAB = numerador / (denominadorA * denominadorB)
-
-    print("similaridade:", similaridadeAB)
-    print()
 
     return similaridadeAB
 
@@ -155,9 +152,7 @@ def start():
         texto_processado = processar_texto(texto)
         
         # Nível 2
-        sentencas_concatenadas = concatenar(texto_processado[0], texto_processado[1])
-        print("saída das sentencas concatenadas")
-        print(sentencas_concatenadas)    
+        sentencas_concatenadas = concatenar(texto_processado[0], texto_processado[1]) 
 
         #Nível 3
         sentencas_completas = []
